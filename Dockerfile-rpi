@@ -1,4 +1,4 @@
-FROM rranshous/simpleagent
+FROM hypriot/rpi-ruby:2.2.2
 
 ADD robogachi.rb /app/robogachi.rb
 ADD Gemfile /app/Gemfile-alt
