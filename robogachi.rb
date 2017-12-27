@@ -47,8 +47,12 @@ report 'status' do |state|
     is_hungry: is_hungry?(state),
     getting_bored: getting_bored?(state),
     is_bored: is_bored?(state),
-    disposition: disposition(state)
-  }
+    disposition: disposition(state) }
+end
+
+report 'about' do |state|
+  puts "reporting about"
+  { name: Config.get(:name) }
 end
 
 periodically do |state|
