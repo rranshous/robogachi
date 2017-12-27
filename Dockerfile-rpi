@@ -9,4 +9,6 @@ ADD Gemfile /app/Gemfile-alt
 RUN cat Gemfile-alt >> Gemfile
 RUN bundle install
 
+ENV IMAGE_NAME rranshous/robogachi-rpi
+
 ENTRYPOINT ["bundle", "exec", "ruby", "robogachi.rb"]

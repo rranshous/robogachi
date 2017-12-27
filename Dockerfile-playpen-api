@@ -1,0 +1,11 @@
+FROM rranshous/robogachi
+
+ADD playpen_api.rb /app/playpen_api.rb
+ADD mechanical-engineering-words.txt /app/mechanical-engineering-words.txt
+
+RUN cat Gemfile-alt >> Gemfile
+RUN bundle install
+
+ENV IMAGE_NAME rranshous/robogachi
+
+ENTRYPOINT ["bundle", "exec", "ruby", "playpen_api.rb"]
