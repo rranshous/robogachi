@@ -67,7 +67,7 @@ end
 report 'status_of' do |state, opts|
   params = opts[:request].query
   name = params["name"]
-  uri = URI(url_for(name))
+  uri = url_for(name)
   log "getting status of: #{uri.to_s}"
   Net::HTTP.start(uri.host, uri.port) do |http|
     JSON.parse(http.request_get('/action/status').read_body)
@@ -78,7 +78,7 @@ action 'forward' do |state, opts|
   params = opts[:request].query
   name = params["name"]
   url = url_for(name)
-  opts[:response]['Location'] = url.to_s
+  opts[:response]['Location'] = url
   { url: url }
 end
 
@@ -88,7 +88,7 @@ def url_for name
     port_def["PublishedPort"]
   end.first
   forward_url = "http://#{Config.get(:cluster_host)}:#{port}"
-  forward_url
+  URI(forward_url)
 end
 
 def swarm
