@@ -52,7 +52,12 @@ action 'add_new' do |state, opts|
                    "TargetPort" => 80}]},
   }
   log "creating service: #{service_def}"
-  r = swarm.create_service(service_def)
+  begin
+    r = swarm.create_service(service_def)
+  rescue Exception => ex
+    puts "EX: #{Exception}"
+    raise
+  end
   log "created service: #{r}"
   # TODO: block until service starts?
   state.added_names << agent_name

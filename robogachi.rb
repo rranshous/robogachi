@@ -1,5 +1,9 @@
 require_relative 'simpleagent'
 
+def log msg=''
+  STDOUT.print "#{msg}\n"
+end
+
 set :name, ARGV.shift || "robogachi"
 set :http_port, (ENV['HTTP_PORT'] || 80).to_i
 set :state_root, ENV['STATE_DIR'] || './state'
@@ -14,12 +18,12 @@ state_field :last_played_at, nil, lambda { |s,o| [s,o].compact.max }
 state_field :times_of_boredom, []
 
 #####################################
-puts "!Robogatchi!!!"
-puts "Named: #{Config.get(:name)}"
-puts "Day length: #{Config.get(:day_length_in_hours)} hours"
-puts "Needs #{Config.get(:meals_per_day)} meals per day"
-puts "Wants to play #{Config.get(:playtimes_per_day)} times per day"
-puts "--------------"
+log "!Robogatchi!!!"
+log "Named: #{Config.get(:name)}"
+log "Day length: #{Config.get(:day_length_in_hours)} hours"
+log "Needs #{Config.get(:meals_per_day)} meals per day"
+log "Wants to play #{Config.get(:playtimes_per_day)} times per day"
+log "--------------"
 #####################################
 
 set :day_length_in_seconds, Config.get(:day_length_in_hours) * 60 * 60
@@ -32,17 +36,17 @@ set :memory_length_seconds,
 
 
 where "action == 'feed'" do |event, state|
-  puts "BEING FED"
+  log "BEING FED"
   state.last_fed_at = Time.now
 end
 
 where "action == 'play'" do |event, state|
-  puts "BEING PLAYED WITH"
+  log "BEING PLAYED WITH"
   state.last_played_at = Time.now
 end
 
 report 'status' do |state|
-  puts "reporting status"
+  log "reporting status"
   { getting_hungry: getting_hungry?(state),
     is_hungry: is_hungry?(state),
     getting_bored: getting_bored?(state),
@@ -51,17 +55,17 @@ report 'status' do |state|
 end
 
 report 'about' do |state|
-  puts "reporting about"
+  log "reporting about"
   { name: Config.get(:name) }
 end
 
 periodically do |state|
   if Time.now >= hungry_at(state)
-    puts "HUNGRY"
+    log "HUNGRY"
     state.times_of_hunger << Time.now
   end
   if Time.now >= bored_at(state)
-    puts "BORED"
+    log "BORED"
     state.times_of_boredom << Time.now
   end
 end
